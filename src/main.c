@@ -32,7 +32,7 @@ void button_init(void)
 	
 		//nvic configuration 
 	/* button is irq number 6. which is connected over EXTI0 line in stm32f4xx */
-	NVIC->IP[EXTI0_IRQn] = 0Xf0;// (low priority )
+	NVIC->IP[EXTI0_IRQn] = 0X00;// (low priority )
 	NVIC_EnableIRQ(EXTI0_IRQn);
 	
 	
@@ -54,9 +54,9 @@ int main(void)
 	/*configure systick timing */
 	//2000 ticks
 	//SysTick_Config(2000);//125 micro seconds
-	SysTick_Config(54);//125 micro seconds
+	SysTick_Config(54);//1 micro seconds //53760 1 milli second
 		/*configure Systick priority and enable it */
-	SCB->SHP[0x0B] = 0X00;// ( high priority)
+	SCB->SHP[0x0B] = 0Xf0;// ( high priority) //PRIO15 systic
 	NVIC_EnableIRQ(SysTick_IRQn);
 	
 
