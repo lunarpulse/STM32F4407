@@ -96,7 +96,7 @@
 
 /************************* Miscellaneous Configuration ************************/
 /*!< Uncomment the following line if you need to use external SRAM or SDRAM as data memory  */
-#if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx)\
+#if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F40_41xxx) || defined(STM32F417xx)\
  || defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx)\
  || defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F412Zx) || defined(STM32F412Vx)
 /* #define DATA_IN_ExtSRAM */
@@ -332,13 +332,13 @@ static void SetSysClock(void)
     /* HCLK = SYSCLK / 1*/
     RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
 
-#if defined (STM32F407xx) || defined (STM32F427_437xx) || defined (STM32F429_439xx)
+#if defined (STM32F40_41xxx) || defined (STM32F427_437xx) || defined (STM32F429_439xx)
     /* PCLK2 = HCLK / 2*/
     RCC->CFGR |= RCC_CFGR_PPRE2_DIV2;
 
     /* PCLK1 = HCLK / 4*/
     RCC->CFGR |= RCC_CFGR_PPRE1_DIV4;
-#endif /* STM32F407xx || STM32F427_437x || STM32F429_439xx */
+#endif /* STM32F40_41xxx || STM32F427_437x || STM32F429_439xx */
 
 #if defined (STM32F401xx)
     /* PCLK2 = HCLK / 2*/
@@ -374,14 +374,14 @@ static void SetSysClock(void)
     FLASH->ACR = FLASH_ACR_PRFTEN | FLASH_ACR_ICEN |FLASH_ACR_DCEN |FLASH_ACR_LATENCY_5WS;
 #endif /* STM32F427_437x || STM32F429_439xx  */
 
-#if defined (STM32F407xx)
+#if defined (STM32F40_41xxx)
     /* Configure Flash prefetch, Instruction cache, Data cache and wait state */
     // 20131217 hwpark. errata sheet. rev.A
     if (DBGMCU->IDCODE & DBGMCU_IDCODE_REV_ID == 0x20000000)    // revision A
         FLASH->ACR = FLASH_ACR_ICEN | FLASH_ACR_DCEN | FLASH_ACR_LATENCY_5WS;
     else    // revision Z or later
         FLASH->ACR = FLASH_ACR_PRFTEN | FLASH_ACR_ICEN |FLASH_ACR_DCEN |FLASH_ACR_LATENCY_5WS;
-#endif /* STM32F407xx  */
+#endif /* STM32F40_41xxx  */
 
 #if defined (STM32F401xx)
     /* Configure Flash prefetch, Instruction cache, Data cache and wait state */
@@ -401,7 +401,7 @@ static void SetSysClock(void)
   { /* If HSE fails to start-up, the application will have wrong clock
          configuration. User can add here some code to deal with this error */
   }
-	RCC->CFGR = 0x0000B40A;
+	//RCC->CFGR = 0x0000B40A;
 }
 #if defined (DATA_IN_ExtSRAM) && defined (DATA_IN_ExtSDRAM)
 #if defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx)\
@@ -771,7 +771,7 @@ void SystemInit_ExtMemCtl(void)
 #endif /* DATA_IN_ExtSDRAM */
 #endif /* STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx || STM32F446xx || STM32F469xx || STM32F479xx */
 
-#if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx)\
+#if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F40_41xxx) || defined(STM32F417xx)\
  || defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx)\
  || defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F412Zx) || defined(STM32F412Vx)
 
@@ -850,7 +850,7 @@ void SystemInit_ExtMemCtl(void)
   FMC_Bank1->BTCR[3]  = 0x00110212;
   FMC_Bank1E->BWTR[2] = 0x0fffffff;
 #endif /* STM32F469xx || STM32F479xx */
-#if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx)|| defined(STM32F417xx)\
+#if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F40_41xxx)|| defined(STM32F417xx)\
    || defined(STM32F412Zx) || defined(STM32F412Vx)
   /* Delay after an RCC peripheral clock enabling */
   tmp = READ_BIT(RCC->AHB3ENR, RCC_AHB3ENR_FSMCEN);
@@ -858,10 +858,10 @@ void SystemInit_ExtMemCtl(void)
   FSMC_Bank1->BTCR[2]  = 0x00001011;
   FSMC_Bank1->BTCR[3]  = 0x00000201;
   FSMC_Bank1E->BWTR[2] = 0x0FFFFFFF;
-#endif /* STM32F405xx || STM32F415xx || STM32F407xx || STM32F417xx || STM32F412Zx || STM32F412Vx */
+#endif /* STM32F405xx || STM32F415xx || STM32F40_41xxx || STM32F417xx || STM32F412Zx || STM32F412Vx */
 
 #endif /* DATA_IN_ExtSRAM */
-#endif /* STM32F405xx || STM32F415xx || STM32F407xx || STM32F417xx || STM32F427xx || STM32F437xx ||\
+#endif /* STM32F405xx || STM32F415xx || STM32F40_41xxx || STM32F417xx || STM32F427xx || STM32F437xx ||\
           STM32F429xx || STM32F439xx || STM32F469xx || STM32F479xx || STM32F412Zx || STM32F412Vx  */ 
   (void)(tmp); 
 }
